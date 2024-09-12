@@ -1,0 +1,33 @@
+@if(isFetching()){
+
+<app-loadin-spinner />
+
+} @else {
+<table>
+  <thead class="table-columns">
+    <tr>
+      <th>Post ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Comment</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(data of data(); track data.id){
+    <tr>
+      <td>{{ data.postId }}</td>
+      <td>{{ data.name }}</td>
+      <td>{{ data.email }}</td>
+      <td>{{ data.body }}</td>
+      <td>
+        <div class="actions">
+          <app-add-comment />
+          <app-delete-comment />
+        </div>
+      </td>
+    </tr>
+    }
+  </tbody>
+</table>
+}
