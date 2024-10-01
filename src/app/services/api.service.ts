@@ -22,15 +22,38 @@ export class ApiService {
   }
 
   loadedUsers() {
-    this.fetch(this.URL).subscribe({
-      next: (value) => {
-        this.comments.set(value);
-        this.observer$.next([...this.comments()].splice(0, 11));
-      },
-      error: (err) => console.dir(err),
-      complete: () => {
-        this.isFetching.update((prev) => false);
-      },
-    });
+    if (this.comments().length === 0) {
+      this.fetch(this.URL).subscribe({
+        next: (value) => {
+          this.comments.set(value.slice(0, 5));
+          this.observer$.next(this.comments());
+        },
+        error: (err) => console.dir(err),
+        complete: () => {
+          this.isFetching.update((prev) => false);
+        },
+      });
+    } else {
+      this.observer$.next(this.comments());
+    }
+  }
+  deleteComment(id: number) {
+    const updatedComments = this.comments().filter(
+      (comment) => comment.id !== id
+    );
+    this.comments.update((oldValues) => updatedComments);
+    this.observer$.next(this.comments());
+  }
+  addComment(currentIndex: number, newComment: Comments) {
+    if (currentIndex === this.comments().length - 1) {
+      this.comments().push(newComment);
+      this.observer$.next(this.comments());
+    } else {
+      this.comments().splice(currentIndex + 1, 0, newComment);
+      this.observer$.next(this.comments());
+    }
+  }
+  getComments() {
+    this.observer$.next(this.comments());
   }
 }

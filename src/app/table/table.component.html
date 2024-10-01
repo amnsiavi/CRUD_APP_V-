@@ -22,8 +22,13 @@
       <td>{{ data.body }}</td>
       <td>
         <div class="actions">
-          <app-add-comment />
-          <app-delete-comment />
+          <a [routerLink]="'/add-comment/' + data.id"
+            ><app-add-comment [comment]="data"
+          /></a>
+          <app-delete-comment
+            [userId]="data.id"
+            (delete)="deleteComment($event)"
+          />
         </div>
       </td>
     </tr>

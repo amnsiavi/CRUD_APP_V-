@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Comments } from '../../Types/comments.model';
 
 @Component({
   selector: 'app-add-comment',
@@ -8,7 +9,12 @@ import { Component } from '@angular/core';
   styleUrl: './add-comment.component.css',
 })
 export class AddCommentComponent {
+  @Output() commentData = new EventEmitter<Comments>();
+  @Input({ required: true }) comment!: Comments;
   get imagePath() {
     return 'plus.png';
+  }
+  sendCommentData() {
+    this.commentData.emit(this.comment);
   }
 }
